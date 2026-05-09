@@ -267,6 +267,19 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 - El avatar es un placeholder (personalización futura)
 - La información de cuenta se actualizará automáticamente
 
+## 🧩 Widgets y APIs usados por las vistas
+- **Navigator**: Rutas nombradas con `Navigator.pushNamed` y `Navigator.pushReplacementNamed` (ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/menu_screen.dart](lib/screens/menu_screen.dart)).
+- **ListView.builder**: Listas dinámicas y renderizado eficiente (ej. [lib/screens/product_list_screen.dart](lib/screens/product_list_screen.dart)).
+- **TextField & TextEditingController**: Campos de entrada con `obscureText`, `readOnly`, `keyboardType` y `maxLines` (varios screens como [lib/screens/login_screen.dart](lib/screens/login_screen.dart) y [lib/screens/register_product_screen.dart](lib/screens/register_product_screen.dart)).
+- **Botones**: `ElevatedButton` para acciones principales y `FloatingActionButton` para añadir productos.
+- **Layouts y contenedores**: `Scaffold`, `AppBar`, `SafeArea`, `Padding`, `Column`, `Row`, `Expanded`, `SizedBox`.
+- **Interacciones**: `GestureDetector`, `InkWell` y `Material` para respuestas táctiles y efectos visuales.
+- **Feedback**: `ScaffoldMessenger.of(context).showSnackBar` para notificaciones breves al usuario.
+- **Selector de fecha**: `showDatePicker` para elegir fechas (ej. [lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
+- **Avatar y iconos**: `CircleAvatar` y `Icon` usados como placeholders visuales.
+- **Estilos**: Uso de `Text`, `TextStyle` y `BoxDecoration` para presentación consistente.
+- **Buenas prácticas**: Liberar `TextEditingController` en `dispose()` para evitar fugas de memoria.
+
 ## 🔄 Flujos de Trabajo
 
 ### 📈 Flujo Principal: Registro de Producto

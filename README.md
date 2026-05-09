@@ -372,7 +372,20 @@ void initState() {
 }
 ```
 
-## 🧭 Flujo de Navegación
+## � Widgets y APIs usados por las vistas
+- **Navigator**: Rutas nombradas con `Navigator.pushNamed` y `Navigator.pushReplacementNamed` (ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/menu_screen.dart](lib/screens/menu_screen.dart)).
+- **ListView.builder**: Listas dinámicas y renderizado eficiente para colecciones largas (ej. [lib/screens/product_list_screen.dart](lib/screens/product_list_screen.dart)).
+- **TextField & TextEditingController**: Entradas de texto con opciones como `obscureText`, `readOnly`, `keyboardType` y `maxLines` (varios screens, p. ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/register_product_screen.dart](lib/screens/register_product_screen.dart)).
+- **Botones**: `ElevatedButton` para acciones primarias y `FloatingActionButton` para acciones destacadas.
+- **Estructura y layout**: `Scaffold`, `AppBar`, `SafeArea`, `Padding`, `Column`, `Row`, `Expanded`, `SizedBox`.
+- **Interacciones táctiles**: `GestureDetector`, `InkWell` y `Material` para manejar taps y efectos visuales.
+- **Mensajes y feedback**: `ScaffoldMessenger.of(context).showSnackBar` para mostrar mensajes temporales al usuario.
+- **Selector de fecha**: `showDatePicker` para seleccionar fechas (ej. [lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
+- **Avatares y iconos**: `CircleAvatar` y `Icon` para representaciones visuales de usuario y acciones.
+- **Estilos y decoración**: `Text`, `TextStyle`, `BoxDecoration`, `Border`, `BorderRadius`, y colores personalizados.
+- **Gestión de recursos**: Llamadas a `dispose()` para liberar `TextEditingController` y evitar fugas de memoria.
+
+## �🧭 Flujo de Navegación
 
 ```mermaid
 flowchart TD
