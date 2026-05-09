@@ -9,6 +9,8 @@
 
 ## 📋 Tabla de Contenidos
 - [Descripción](#-descripción)
+  - [Objetivo](#-objetivo)
+  - [Usuario Actual](#-usuario-actual)
 - [Características](#-características)
 - [Arquitectura](#-arquitectura)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
@@ -18,6 +20,7 @@
 - [Flujo de Navegación](#-flujo-de-navegación)
 - [Casos de Uso](#-casos-de-uso)
 - [Tecnologías](#-tecnologías)
+- [Datos de Prueba](#-datos-de-prueba)
 - [Roadmap](#-roadmap)
 - [Contribución](#-contribución)
 - [Licencia](#-licencia)
@@ -28,6 +31,17 @@
 
 ### 🎯 Objetivo
 Crear una plataforma móvil eficiente para pequeños comercios que necesiten gestionar su inventario de productos de manera sencilla y profesional.
+
+### 👤 Usuario Actual
+
+| Dato | Valor |
+|------|-------|
+| **Nombre Completo** | Rafael Chucco |
+| **Fecha de Nacimiento** | 19 de agosto de 2006 |
+| **Email** | rafael@gmail.com |
+| **Miembro Desde** | Febrero 2023 |
+| **Estado** | Activo |
+
 
 ## ✨ Características
 
@@ -310,34 +324,51 @@ Map<String, String> product = {
 
 <div align="center">
 
-| Sección | Campo | Tipo | Widget | Funcionalidad |
-|---------|-------|------|--------|---------------|
-| **Avatar** | Foto de perfil | CircleAvatar | Icon | Placeholder visual |
-| **Datos Personales** | Nombre | TextEditingController | TextField | Editable |
-| **Datos Personales** | Apellidos | TextEditingController | TextField | Editable |
-| **Datos Personales** | Fecha de nacimiento | TextEditingController | DatePicker | Selector de fecha |
-| **Información** | Email | Text (readonly) | Container | Solo lectura |
-| **Información** | Miembro desde | Text (readonly) | Container | Solo lectura |
-| **Información** | Productos registrados | Text (readonly) | Container | Contador |
+| Sección | Campo | Tipo | Widget | Valor Actual | Funcionalidad |
+|---------|-------|------|--------|--------------|---------------|
+| **Avatar** | Foto de perfil | CircleAvatar | Icon | 👤 | Placeholder visual |
+| **Datos Personales** | Nombre | TextEditingController | TextField | **Rafael** | Editable |
+| **Datos Personales** | Apellidos | TextEditingController | TextField | **Chucco** | Editable |
+| **Datos Personales** | Fecha de nacimiento | TextEditingController | DatePicker | **19/08/2006** | Selector de fecha |
+| **Información** | Email | Text (readonly) | Container | **rafael@gmail.com** | Solo lectura |
+| **Información** | Miembro desde | Text (readonly) | Container | **Febrero 2023** | Solo lectura |
+| **Información** | Productos registrados | Text (readonly) | Container | 12 | Contador |
 
 </div>
 
 **Funcionalidades Especiales:**
-- ✅ **Selector de fecha interactivo**
+- ✅ **Selector de fecha interactivo** con fecha de nacimiento del usuario (19/08/2006)
 - ✅ **Avatar placeholder personalizable**
-- ✅ **Información de cuenta integrada**
-- ✅ **Formulario de edición completo**
+- ✅ **Información de cuenta integrada** con datos personales reales
+- ✅ **Formulario de edición completo** para gestionar datos del usuario
+- ✅ **Validación de fechas** dentro del rango permitido (1900 hasta hoy)
 
-**DatePicker Implementation:**
+**DatePicker Implementation (Usuario Rafael Chucco):**
 ```dart
 Future<void> _selectBirthDate(BuildContext context) async {
   final DateTime? picked = await showDatePicker(
     context: context,
-    initialDate: DateTime(1990, 3, 15),
+    initialDate: DateTime(2006, 8, 19),  // Fecha de Rafael
     firstDate: DateTime(1900),
     lastDate: DateTime.now(),
   );
   // Formateo automático DD/MM/AAAA
+  // Ej: 19/08/2006
+}
+```
+
+**Datos de Prueba Pre-cargados:**
+```dart
+void initState() {
+  super.initState();
+  // Usuario: Rafael Chucco
+  _firstNameController.text = 'Rafael';
+  _lastNameController.text = 'Chucco';
+  _birthDateController.text = '19/08/2006';
+  
+  // Información de cuenta
+  // Email: rafael@gmail.com
+  // Miembro desde: Febrero 2023
 }
 ```
 
@@ -447,6 +478,51 @@ dev_dependencies:
 - **Accent**: `#E3F2FD` (Light Blue)
 - **Error**: `#F44336` (Red)
 - **Success**: `#4CAF50` (Green)
+
+## 🧪 Datos de Prueba
+
+### 👤 Usuario Principal: Rafael Chucco
+
+Para probar la aplicación, se incluyen los siguientes datos pre-cargados:
+
+#### Información Personal
+| Campo | Valor |
+|-------|-------|
+| **Nombre** | Rafael |
+| **Apellidos** | Chucco |
+| **Fecha de Nacimiento** | 19/08/2006 (19 de agosto de 2006) |
+| **Edad** | 19 años |
+
+#### Información de Cuenta
+| Campo | Valor |
+|-------|-------|
+| **Email** | rafael@gmail.com |
+| **Miembro desde** | Febrero 2023 |
+| **Productos Registrados** | 12 |
+| **Estado** | Activo |
+
+#### Acceso a la Aplicación
+| Campo | Valor (Ej) |
+|-------|-------|
+| **Email de Login** | (Usar cualquier valor) |
+| **Contraseña** | (Usar cualquier valor) |
+
+**Nota**: Actualmente la aplicación no valida credenciales. El login redirige directamente al menú para fines de desarrollo.
+
+### 📦 Productos de Ejemplo
+
+En la pantalla de "Lista de Productos" encontrarás productos de ejemplo con la siguiente estructura:
+
+```dart
+{
+  'name': 'Nombre del Producto',
+  'price': 'Precio en moneda local',
+  'description': 'Descripción del producto',
+  'category': 'Categoría (Ej: Electrónica, Ropa, etc)',
+}
+```
+
+**Total de productos de ejemplo**: 12 unidades
 
 ## 🗺️ Roadmap
 

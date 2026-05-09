@@ -12,11 +12,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
 
-  // Datos de ejemplo (sin lógica real)
+  /// Inicialización de datos del usuario
+  /// Usuario: Rafael Chucco
+  /// Email: rafael@gmail.com
+  /// Fecha de nacimiento: 19 de agosto de 2006
+  /// Miembro desde: Febrero 2023
   @override
   void initState() {
     super.initState();
-    // Datos de ejemplo pre-cargados
+    // Datos pre-cargados del usuario Rafael Chucco
     _firstNameController.text = 'Rafael';
     _lastNameController.text = 'Chucco';
     _birthDateController.text = '19/08/2006';
@@ -114,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Información adicional
+            // Información adicional - Usuario Rafael Chucco
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -134,8 +138,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // Email: rafael@gmail.com (correo del usuario)
                   _buildInfoRow('Email', 'rafael@gmail.com'),
                   const SizedBox(height: 8),
+                  // Miembro desde: Febrero 2023
                   _buildInfoRow('Miembro desde', 'Febrero 2023'),
                   const SizedBox(height: 8),
                   _buildInfoRow('Productos registrados', '12'),
@@ -211,6 +217,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  /// Selector de fecha de nacimiento
+  /// Fecha inicial: 19 de agosto de 2006 (Cumpleaños de Rafael Chucco)
   Future<void> _selectBirthDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
