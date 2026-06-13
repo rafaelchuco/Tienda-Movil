@@ -81,13 +81,21 @@ tiendamovil/
 │   ├── 📄 API.md                    # Documentación de API (futura)
 │   └── 📄 DEPLOYMENT.md             # Guía de despliegue (futura)
 ├── 📁 lib/                          # 🎯 Código fuente principal
-│   ├── 📄 main.dart                 # 🚀 Punto de entrada
+│   ├── 📄 main.dart                 # 🚀 Punto de entrada (CupertinoApp)
 │   ├── 📁 screens/                  # 📱 Pantallas de la aplicación
-│   │   ├── 📄 login_screen.dart             
-│   │   ├── 📄 menu_screen.dart              
-│   │   ├── 📄 register_product_screen.dart  
-│   │   ├── 📄 product_list_screen.dart      
-│   │   └── 📄 profile_screen.dart           
+│   │   ├── 📄 login_screen.dart             # 🔐 Login
+│   │   ├── 📄 main_tab_scaffold.dart        # 🏠 Tab bar (7 tabs)
+│   │   ├── 📄 home_screen.dart              # 🏡 Inicio / resumen
+│   │   ├── 📄 search_screen.dart            # 🔍 Búsqueda y filtros
+│   │   ├── 📄 product_list_screen.dart      # 📋 Lista de productos
+│   │   ├── 📄 product_detail_screen.dart    # 🏷️ Detalle de producto
+│   │   ├── 📄 cart_screen.dart              # 🛒 Carrito de compras
+│   │   ├── 📄 notifications_screen.dart     # 🔔 Notificaciones
+│   │   ├── 📄 register_product_screen.dart  # ➕ Registro de producto
+│   │   ├── 📄 profile_screen.dart           # 👤 Perfil de usuario
+│   │   └── 📄 settings_screen.dart          # ⚙️ Configuraciones
+│   ├── 📁 utils/                    # 🛠️ Utilidades
+│   │   └── 📄 cupertino_dialogs.dart        # Diálogos reutilizables
 │   ├── 📁 widgets/                  # 🧩 Widgets reutilizables (futura)
 │   │   ├── 📄 custom_button.dart            
 │   │   ├── 📄 custom_textfield.dart         
@@ -245,19 +253,19 @@ class MyApp extends StatelessWidget {
 graph TD
     A[🔐 /login] --> B[🏠 MainTabScaffold]
     B --> C[Tab 0: HomeScreen]
-    B --> D[Tab 1: ProductListScreen]
-    B --> E[Tab 2: ProfileScreen]
-    B --> F[Tab 3: SettingsScreen]
-    D --> |CupertinoPageRoute| G[➕ RegisterProductScreen]
-    G --> |Pop| D
+    B --> D[Tab 1: SearchScreen]
+    B --> E[Tab 2: ProductListScreen]
+    B --> F[Tab 3: CartScreen]
+    B --> G[Tab 4: NotificationsScreen]
+    B --> H[Tab 5: ProfileScreen]
+    B --> I[Tab 6: SettingsScreen]
+    E --> |CupertinoPageRoute| J[🏷️ ProductDetailScreen]
+    E --> |CupertinoPageRoute| K[➕ RegisterProductScreen]
+    J --> |Pop| E
+    K --> |Pop| E
     
     style A fill:#fff3e0
     style B fill:#e8f5e9
-    style C fill:#fce4ec
-    style D fill:#fff8e1
-    style E fill:#f3e5f5
-    style F fill:#e8f5e9
-    style G fill:#e1f5fe
 ```
 
 ### Tipos de Navegación Implementados

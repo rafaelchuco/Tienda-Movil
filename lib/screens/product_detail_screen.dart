@@ -54,7 +54,7 @@ class ProductDetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: CupertinoColors.systemBlue.withOpacity(0.1),
+                        color: CupertinoColors.systemBlue.withAlpha(26),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
@@ -95,7 +95,7 @@ class ProductDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: CupertinoColors.systemGreen.withOpacity(0.1),
+                            color: CupertinoColors.systemGreen.withAlpha(26),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Text(

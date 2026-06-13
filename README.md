@@ -100,8 +100,12 @@ tiendamovil/
 │       ├── 📄 login_screen.dart             # 🔐 Pantalla de login
 │       ├── 📄 main_tab_scaffold.dart        # 🏠 Tab bar principal (CupertinoTabScaffold)
 │       ├── 📄 home_screen.dart              # 🏡 Pantalla de inicio
-│       ├── 📄 register_product_screen.dart  # ➕ Registro de productos
+│       ├── 📄 search_screen.dart            # 🔍 Búsqueda y filtros
 │       ├── 📄 product_list_screen.dart      # 📋 Lista de productos
+│       ├── 📄 product_detail_screen.dart    # 🏷️ Detalle de producto
+│       ├── 📄 cart_screen.dart              # 🛒 Carrito de compras
+│       ├── 📄 notifications_screen.dart     # 🔔 Notificaciones
+│       ├── 📄 register_product_screen.dart  # ➕ Registro de productos
 │       ├── 📄 profile_screen.dart           # 👤 Perfil de usuario
 │       └── 📄 settings_screen.dart          # ⚙️ Configuraciones
 ├── 📁 android/                      # Configuración Android
@@ -230,12 +234,15 @@ Usuario ingresa credenciales → Presiona LOGIN → Navega a MenuScreen
 
 <div align="center">
 
-| Tab | Ícono | Pantalla | Descripción |
-|-----|-------|----------|-------------|
-| **Home** | `CupertinoIcons.house_fill` | HomeScreen | Pantalla principal |
-| **Productos** | `CupertinoIcons.cube_box_fill` | ProductListScreen | Lista de productos |
-| **Perfil** | `CupertinoIcons.person_fill` | ProfileScreen | Perfil de usuario |
-| **Ajustes** | `CupertinoIcons.settings_solid` | SettingsScreen | Configuraciones |
+| # | Tab | Ícono | Pantalla | Descripción |
+|---|-----|-------|----------|-------------|
+| 0 | **Inicio** | `house_fill` | HomeScreen | Resumen y métricas |
+| 1 | **Buscar** | `search` | SearchScreen | Búsqueda y filtros por categoría |
+| 2 | **Productos** | `cube_box_fill` | ProductListScreen | Lista de inventario |
+| 3 | **Carrito** | `cart_fill` | CartScreen | Carrito de compras |
+| 4 | **Avisos** | `bell_fill` | NotificationsScreen | Notificaciones agrupadas |
+| 5 | **Perfil** | `person_fill` | ProfileScreen | Datos del usuario |
+| 6 | **Ajustes** | `settings_solid` | SettingsScreen | Configuraciones |
 
 </div>
 
@@ -247,7 +254,28 @@ Usuario ingresa credenciales → Presiona LOGIN → Navega a MenuScreen
 
 ---
 
-### ➕ 3. Register Product Screen (`register_product_screen.dart`)
+### 🔍 3. Search Screen (`search_screen.dart`)
+
+<div align="center">
+
+| Elemento | Widget | Descripción |
+|----------|--------|-------------|
+| **Barra de búsqueda** | `CupertinoSearchTextField` | Campo de texto con ícono lupa y botón limpiar |
+| **Filtros rápidos** | `ListView` horizontal + `GestureDetector` | Chips scrollables por categoría |
+| **Búsquedas recientes** | `CupertinoListSection.insetGrouped` | Historial con botón eliminar |
+| **Categorías populares** | `CupertinoListSection.insetGrouped` | Lista con conteo de productos |
+
+</div>
+
+**Funcionalidades:**
+- ✅ `CupertinoSearchTextField` con placeholder y callbacks `onChanged` / `onSubmitted`
+- ✅ Filtros horizontales scrollables con chip seleccionado resaltado en azul
+- ✅ Sección de búsquedas recientes con `CupertinoIcons.clock` y botón `xmark_circle_fill`
+- ✅ Categorías con íconos a color y conteo de productos
+
+---
+
+### ➕ 4. Register Product Screen (`register_product_screen.dart`)
 
 <div align="center">
 
@@ -275,7 +303,7 @@ Llenar campos → GUARDAR → Mostrar confirmación → Limpiar formulario
 
 ---
 
-### 📋 4. Product List Screen (`product_list_screen.dart`)
+### 📋 5. Product List Screen (`product_list_screen.dart`)
 
 <div align="center">
 
@@ -307,7 +335,73 @@ Map<String, String> product = {
 
 ---
 
-### 👤 5. Profile Screen (`profile_screen.dart`)
+### 🏷️ 6. Product Detail Screen (`product_detail_screen.dart`)
+
+<div align="center">
+
+| Elemento | Widget | Descripción |
+|----------|--------|-------------|
+| **Imagen** | `Container` placeholder | Área 280px con ícono `CupertinoIcons.photo` |
+| **Chip categoría** | `Container` decorado | Etiqueta con fondo azul translúcido |
+| **Nombre y precio** | `Text` | Nombre en bold 26px, precio en `systemBlue` 28px |
+| **Badge stock** | `Container` decorado | Texto verde "En stock: N" |
+| **Info adicional** | `CupertinoListSection.insetGrouped` | Categoría, stock, código SKU |
+| **Botón carrito** | `CupertinoButton.filled` | Ancho completo con ícono `cart_badge_plus` |
+
+</div>
+
+**Acceso:** Se abre con `CupertinoPageRoute` desde `ProductListScreen` (no es tab).
+
+**Funcionalidades:**
+- ✅ Imagen placeholder lista para reemplazar con `Image.network` o `Image.asset`
+- ✅ Favorito en la navigation bar con `CupertinoIcons.heart`
+- ✅ Scroll completo con `SingleChildScrollView`
+- ✅ Botón "Agregar al carrito" con ancho completo
+
+---
+
+### 🛒 7. Cart Screen (`cart_screen.dart`)
+
+<div align="center">
+
+| Elemento | Widget | Descripción |
+|----------|--------|-------------|
+| **Lista de items** | `ListView.builder` | Items con imagen placeholder |
+| **Controles cantidad** | `CupertinoButton` | Botones `minus_circle` / `plus_circle_fill` |
+| **Resumen** | `Column` en footer | Subtotal, envío, total |
+| **Botón pago** | `CupertinoButton.filled` | "Proceder al pago" ancho completo |
+| **Vaciar** | `CupertinoButton` trailing | Texto rojo `destructiveRed` |
+
+</div>
+
+**Funcionalidades:**
+- ✅ Footer fijo con resumen de precio separado por `Border(top: ...)`
+- ✅ Items con imagen placeholder, nombre, precio y controles +/−
+- ✅ Envío gratuito en `systemGreen`, total en `systemBlue`
+
+---
+
+### 🔔 8. Notifications Screen (`notifications_screen.dart`)
+
+<div align="center">
+
+| Sección | Contenido |
+|---------|-----------|
+| **HOY** | Pedido confirmado, Stock bajo, Nueva valoración |
+| **AYER** | Promoción activa, Nuevo cliente |
+| **ESTA SEMANA** | Reporte semanal, Producto sin stock |
+
+</div>
+
+**Funcionalidades:**
+- ✅ Agrupadas con `CupertinoListSection.insetGrouped` por fecha
+- ✅ Íconos en contenedor redondeado con color de fondo semitransparente
+- ✅ Punto azul `systemBlue` para notificaciones no leídas
+- ✅ Botón "Leer todo" en la navigation bar
+
+---
+
+### 👤 9. Profile Screen (`profile_screen.dart`)
 
 <div align="center">
 
@@ -390,21 +484,22 @@ flowchart TD
     
     B --> |Login Success| C[🏠 CupertinoTabScaffold]
     
-    C --> |Tab 0| D[🏡 Home Screen]
-    C --> |Tab 1| E[📋 Product List Screen]
-    C --> |Tab 2| F[👤 Profile Screen]
-    C --> |Tab 3| G[⚙️ Settings Screen]
+    C --> |Tab 0| D[🏡 Home]
+    C --> |Tab 1| E[🔍 Buscar]
+    C --> |Tab 2| F[📋 Productos]
+    C --> |Tab 3| G[🛒 Carrito]
+    C --> |Tab 4| H[🔔 Avisos]
+    C --> |Tab 5| I[👤 Perfil]
+    C --> |Tab 6| J[⚙️ Ajustes]
     
-    E --> |CupertinoPageRoute| H[➕ Register Product Screen]
-    H --> |Pop| E
+    F --> |CupertinoPageRoute| K[🏷️ Detalle Producto]
+    F --> |CupertinoPageRoute| L[➕ Registro Producto]
+    K --> |Pop| F
+    L --> |Pop| F
     
     style A fill:#e1f5fe
     style B fill:#fff3e0
     style C fill:#e8f5e9
-    style D fill:#fce4ec
-    style E fill:#fff8e1
-    style F fill:#f3e5f5
-    style G fill:#e8f5e9
 ```
 
 ### 📍 Estructura de Navegación
@@ -413,11 +508,15 @@ flowchart TD
 |-------|--------|----------|-------------|
 | Raíz | `CupertinoApp` | — | Punto de entrada (initialRoute: `/login`) |
 | Login | `CupertinoPageScaffold` | LoginScreen | Pantalla inicial de autenticación |
-| Principal | `CupertinoTabScaffold` | MainTabScaffold | Hub central con 4 tabs |
-| Tab 0 | `CupertinoTabView` | HomeScreen | Pantalla de inicio |
-| Tab 1 | `CupertinoTabView` | ProductListScreen | Lista de productos |
-| Tab 2 | `CupertinoTabView` | ProfileScreen | Perfil de usuario |
-| Tab 3 | `CupertinoTabView` | SettingsScreen | Configuraciones |
+| Principal | `CupertinoTabScaffold` | MainTabScaffold | Hub central con 7 tabs |
+| Tab 0 | `CupertinoTabView` | HomeScreen | Resumen y métricas |
+| Tab 1 | `CupertinoTabView` | SearchScreen | Búsqueda y filtros |
+| Tab 2 | `CupertinoTabView` | ProductListScreen | Lista de inventario |
+| Tab 3 | `CupertinoTabView` | CartScreen | Carrito de compras |
+| Tab 4 | `CupertinoTabView` | NotificationsScreen | Notificaciones |
+| Tab 5 | `CupertinoTabView` | ProfileScreen | Perfil de usuario |
+| Tab 6 | `CupertinoTabView` | SettingsScreen | Configuraciones |
+| Modal | `CupertinoPageRoute` | ProductDetailScreen | Detalle de producto |
 | Modal | `CupertinoPageRoute` | RegisterProductScreen | Formulario de registro |
 
 ## 🎯 Casos de Uso

@@ -7,7 +7,15 @@ y este proyecto adhiere al [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### ✅ Migrado en esta versión
+### ✅ Agregado en esta versión
+- **4 nuevas pantallas template** (solo UI, sin lógica):
+  - `search_screen.dart`: `CupertinoSearchTextField`, filtros horizontales scrollables, historial y categorías
+  - `cart_screen.dart`: lista de items con controles +/−, footer con resumen de precio y botón de pago
+  - `notifications_screen.dart`: notificaciones agrupadas por fecha con `CupertinoListSection.insetGrouped`
+  - `product_detail_screen.dart`: imagen placeholder, precio, stock, descripción, info con `CupertinoListSection`
+- **Tab bar expandido**: de 4 a 7 tabs (Inicio, Buscar, Productos, Carrito, Avisos, Perfil, Ajustes)
+
+### ✅ Migrado previamente
 - **Material → Cupertino**: Migración completa de `MaterialApp` a `CupertinoApp`
 - **Menú → CupertinoTabScaffold**: Reemplazado menú de lista por tab bar nativo iOS
 - **ElevatedButton → CupertinoButton.filled**: Todos los botones primarios migrados

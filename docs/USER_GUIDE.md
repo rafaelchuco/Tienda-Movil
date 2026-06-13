@@ -90,20 +90,91 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 
 #### 🎯 Tabs Disponibles:
 
-| Tab | Ícono | Pantalla | Descripción |
-|-----|-------|----------|-------------|
-| **Home** | 🏠 `house_fill` | HomeScreen | Pantalla de inicio |
-| **Productos** | 📦 `cube_box_fill` | ProductListScreen | Ver inventario completo |
-| **Perfil** | 👤 `person_fill` | ProfileScreen | Tu perfil personal |
-| **Ajustes** | ⚙️ `settings_solid` | SettingsScreen | Configuraciones |
+| # | Tab | Ícono | Pantalla | Descripción |
+|---|-----|-------|----------|-------------|
+| 0 | **Inicio** | 🏠 `house_fill` | HomeScreen | Resumen y métricas |
+| 1 | **Buscar** | 🔍 `search` | SearchScreen | Búsqueda con filtros por categoría |
+| 2 | **Productos** | 📦 `cube_box_fill` | ProductListScreen | Lista de inventario |
+| 3 | **Carrito** | 🛒 `cart_fill` | CartScreen | Carrito de compras |
+| 4 | **Avisos** | 🔔 `bell_fill` | NotificationsScreen | Notificaciones agrupadas |
+| 5 | **Perfil** | 👤 `person_fill` | ProfileScreen | Tu perfil personal |
+| 6 | **Ajustes** | ⚙️ `settings_solid` | SettingsScreen | Configuraciones |
 
 #### 💡 Tips:
 - El tab bar es persistente y siempre visible
-- Cada tab mantiene su propio historial de navegación
+- Cada tab mantiene su propio historial de navegación independiente
 
 ---
 
-### ➕ 3. Registro de Productos
+### 🔍 3. Búsqueda (`search_screen.dart`)
+
+**Propósito**: Encontrar productos rápidamente con filtros por categoría.
+
+#### 🎯 Elementos:
+- **`CupertinoSearchTextField`**: barra de búsqueda con ícono lupa y botón para limpiar
+- **Filtros horizontales**: chips scrollables (Todos, Electrónicos, Ropa, Alimentos, Hogar, Juguetes)
+- **Búsquedas recientes**: historial con botón para eliminar cada entrada
+- **Categorías populares**: lista con conteo de productos por categoría
+
+#### 💡 Tips:
+- Toca un filtro para seleccionar la categoría (se resalta en azul)
+- Toca la X de una búsqueda reciente para eliminarla
+- Toca una categoría para ver sus productos
+
+---
+
+### 🛒 4. Carrito (`cart_screen.dart`)
+
+**Propósito**: Revisar y gestionar los productos antes de pagar.
+
+#### 🎯 Elementos:
+- **Lista de items**: imagen placeholder, nombre, precio y controles de cantidad
+- **Controles +/−**: botones `CupertinoButton` con íconos `minus_circle` / `plus_circle_fill`
+- **Resumen de precio**: subtotal, envío (gratis) y total en footer fijo
+- **Botón "Vaciar"**: texto rojo en la navigation bar
+- **Botón "Proceder al pago"**: `CupertinoButton.filled` ancho completo
+
+#### 💡 Tips:
+- Usa los botones + y − para ajustar cantidades
+- El total se actualiza al modificar cantidades (cuando se implemente la lógica)
+
+---
+
+### 🔔 5. Notificaciones (`notifications_screen.dart`)
+
+**Propósito**: Ver alertas y avisos agrupados por fecha.
+
+#### 🎯 Grupos:
+| Sección | Ejemplos de notificaciones |
+|---------|---------------------------|
+| **HOY** | Pedido confirmado, Stock bajo, Nueva valoración |
+| **AYER** | Promoción activa, Nuevo cliente |
+| **ESTA SEMANA** | Reporte semanal, Producto sin stock |
+
+#### 💡 Tips:
+- Las notificaciones no leídas muestran un punto azul a la derecha
+- Toca "Leer todo" para marcarlas todas como leídas (cuando se implemente)
+
+---
+
+### 🏷️ 6. Detalle de Producto (`product_detail_screen.dart`)
+
+**Propósito**: Ver toda la información de un producto antes de comprarlo.
+
+#### 🎯 Secciones:
+- **Imagen**: área placeholder de 280px lista para mostrar fotos reales
+- **Categoría**: chip con fondo azul translúcido
+- **Nombre y precio**: precio destacado en `systemBlue`
+- **Badge de stock**: etiqueta verde "En stock: N"
+- **Descripción**: texto con interlineado 1.5
+- **Info adicional**: `CupertinoListSection` con categoría, stock y código SKU
+- **Botón "Agregar al carrito"**: ancho completo con ícono `cart_badge_plus`
+
+**Acceso**: Se abre desde la lista de productos con `CupertinoPageRoute` (desliza hacia atrás para volver).
+
+---
+
+### ➕ 7. Registro de Productos
 
 **Propósito**: Añadir nuevos productos a tu inventario con información completa.
 
@@ -157,7 +228,7 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 
 ---
 
-### 📋 4. Lista de Productos
+### 📋 8. Lista de Productos
 
 **Propósito**: Visualizar y gestionar todo tu inventario de productos.
 
@@ -205,7 +276,7 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 
 ---
 
-### 👤 5. Perfil de Usuario
+### 👤 9. Perfil de Usuario
 
 **Propósito**: Gestionar tu información personal y datos de cuenta.
 
