@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'screens/login_screen.dart';
-import 'screens/menu_screen.dart';
-import 'screens/register_product_screen.dart';
-import 'screens/product_list_screen.dart';
-import 'screens/profile_screen.dart';
+import 'screens/main_tab_scaffold.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,23 +11,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Tienda Móvil',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4285F4)),
-        useMaterial3: true,
+      theme: const CupertinoThemeData(
+        primaryColor: CupertinoColors.systemBlue,
+        brightness: Brightness.light,
       ),
-      initialRoute: '/login',
+      home: const LoginScreen(),
       routes: {
         '/login': (context) => const LoginScreen(),
-        '/menu': (context) => const MenuScreen(),
-        '/register-product': (context) => const RegisterProductScreen(),
-        '/product-list': (context) => const ProductListScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/main': (context) => const MainTabScaffold(),
       },
     );
   }
 }
-
-

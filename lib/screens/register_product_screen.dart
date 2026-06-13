@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import '../utils/cupertino_dialogs.dart';
 
 class RegisterProductScreen extends StatefulWidget {
   const RegisterProductScreen({super.key});
@@ -16,106 +17,91 @@ class _RegisterProductScreenState extends State<RegisterProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Registro de Productos'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Nuevo producto'),
+        previousPageTitle: 'Productos',
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Título
-            const Text(
-              'REGISTRO DE\nPRODUCTOS',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Registrar producto',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.label,
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            
-            // Campo 1: Nombre del producto
-            _buildInputField(
-              'Nombre del producto',
-              _nameController,
-              'Ingrese el nombre del producto',
-            ),
-            const SizedBox(height: 24),
-            
-            // Campo 2: Precio
-            _buildInputField(
-              'Precio',
-              _priceController,
-              'Ingrese el precio',
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 24),
-            
-            // Campo 3: Descripción
-            _buildInputField(
-              'Descripción',
-              _descriptionController,
-              'Ingrese la descripción del producto',
-              maxLines: 3,
-            ),
-            const SizedBox(height: 24),
-            
-            // Campo 4: Categoría
-            _buildInputField(
-              'Categoría',
-              _categoryController,
-              'Ingrese la categoría',
-            ),
-            const SizedBox(height: 24),
-            
-            // Campo 5: Stock
-            _buildInputField(
-              'Stock',
-              _stockController,
-              'Ingrese la cantidad en stock',
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 40),
-            
-            // Botón GUARDAR
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Solo mostrar mensaje, sin lógica
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Producto guardado (sin lógica implementada)'),
+              const SizedBox(height: 8),
+              const Text(
+                'Completa los datos del nuevo producto',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: CupertinoColors.secondaryLabel,
+                ),
+              ),
+              const SizedBox(height: 32),
+              _buildInputField(
+                'Nombre del producto',
+                _nameController,
+                'Ingrese el nombre del producto',
+              ),
+              const SizedBox(height: 20),
+              _buildInputField(
+                'Precio',
+                _priceController,
+                'Ingrese el precio',
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+              ),
+              const SizedBox(height: 20),
+              _buildInputField(
+                'Descripción',
+                _descriptionController,
+                'Ingrese la descripción del producto',
+                maxLines: 3,
+              ),
+              const SizedBox(height: 20),
+              _buildInputField(
+                'Categoría',
+                _categoryController,
+                'Ingrese la categoría',
+              ),
+              const SizedBox(height: 20),
+              _buildInputField(
+                'Stock',
+                _stockController,
+                'Ingrese la cantidad en stock',
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoButton.filled(
+                  onPressed: () async {
+                    await showInfoDialog(
+                      context,
+                      'Producto guardado (sin lógica implementada)',
+                      title: 'Listo',
+                    );
+                    _clearFields();
+                  },
+                  child: const Text(
+                    'Guardar',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                     ),
-                  );
-                  
-                  // Limpiar campos
-                  _clearFields();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4285F4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'GUARDAR',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -134,30 +120,25 @@ class _RegisterProductScreenState extends State<RegisterProductScreen> {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black54,
+            fontSize: 15,
+            color: CupertinoColors.secondaryLabel,
             fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(height: 8),
-        Container(
+        CupertinoTextField(
+          controller: controller,
+          placeholder: hint,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.grey.shade400,
-                width: 1.0,
-              ),
-            ),
+            color: CupertinoColors.systemGrey6,
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            maxLines: maxLines,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hint,
-              hintStyle: TextStyle(color: Colors.grey.shade500),
-            ),
+          style: const TextStyle(
+            fontSize: 17,
+            color: CupertinoColors.label,
           ),
         ),
       ],

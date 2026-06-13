@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import '../utils/cupertino_dialogs.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,145 +11,110 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _birthDateController = TextEditingController();
 
-  /// Inicialización de datos del usuario
-  /// Usuario: Rafael Chucco
-  /// Email: rafael@gmail.com
-  /// Fecha de nacimiento: 19 de agosto de 2006
-  /// Miembro desde: Febrero 2023
+  DateTime _birthDate = DateTime(2006, 8, 19);
+
   @override
   void initState() {
     super.initState();
-    // Datos pre-cargados del usuario Rafael Chucco
     _firstNameController.text = 'Rafael';
     _lastNameController.text = 'Chucco';
-    _birthDateController.text = '19/08/2006';
+  }
+
+  String get _birthDateText {
+    final d = _birthDate.day.toString().padLeft(2, '0');
+    final m = _birthDate.month.toString().padLeft(2, '0');
+    return '$d/$m/${_birthDate.year}';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Perfil'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Perfil'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            // Foto de perfil (placeholder)
-            const CircleAvatar(
-              radius: 60,
-              backgroundColor: Color(0xFF4285F4),
-              child: Icon(Icons.person, size: 60, color: Colors.white),
-            ),
-            const SizedBox(height: 20),
-
-            // Título
-            const Text(
-              'Mi Perfil',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 40),
-
-            // Nombre
-            _buildProfileField(
-              'Nombre',
-              _firstNameController,
-              'Ingrese su nombre',
-            ),
-            const SizedBox(height: 24),
-
-            // Apellidos
-            _buildProfileField(
-              'Apellidos',
-              _lastNameController,
-              'Ingrese sus apellidos',
-            ),
-            const SizedBox(height: 24),
-
-            // Fecha de nacimiento
-            _buildProfileField(
-              'Fecha de nacimiento',
-              _birthDateController,
-              'DD/MM/AAAA',
-              readOnly: true,
-              onTap: () => _selectBirthDate(context),
-            ),
-            const SizedBox(height: 40),
-
-            // Botón Guardar
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Solo mostrar mensaje, sin lógica
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Perfil actualizado (sin lógica implementada)',
-                      ),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4285F4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 120,
+                height: 120,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: CupertinoColors.systemBlue,
                 ),
-                child: const Text(
-                  'GUARDAR CAMBIOS',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                child: const Icon(
+                  CupertinoIcons.person_fill,
+                  size: 64,
+                  color: CupertinoColors.white,
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // Información adicional - Usuario Rafael Chucco
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade300),
+              const SizedBox(height: 20),
+              const Text(
+                'Mi Perfil',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.label,
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Información de la cuenta',
+              const SizedBox(height: 32),
+              _buildProfileField(
+                'Nombre',
+                _firstNameController,
+                'Ingrese su nombre',
+              ),
+              const SizedBox(height: 20),
+              _buildProfileField(
+                'Apellidos',
+                _lastNameController,
+                'Ingrese sus apellidos',
+              ),
+              const SizedBox(height: 20),
+              _buildBirthDateField(),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoButton.filled(
+                  onPressed: () {
+                    showInfoDialog(
+                      context,
+                      'Perfil actualizado (sin lógica implementada)',
+                      title: 'Listo',
+                    );
+                  },
+                  child: const Text(
+                    'Guardar cambios',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  // Email: rafael@gmail.com (correo del usuario)
-                  _buildInfoRow('Email', 'rafael@gmail.com'),
-                  const SizedBox(height: 8),
-                  // Miembro desde: Febrero 2023
-                  _buildInfoRow('Miembro desde', 'Febrero 2023'),
-                  const SizedBox(height: 8),
-                  _buildInfoRow('Productos registrados', '12'),
+                ),
+              ),
+              const SizedBox(height: 24),
+              CupertinoListSection.insetGrouped(
+                header: const Text('Información de la cuenta'),
+                children: const [
+                  CupertinoListTile(
+                    title: Text('Email'),
+                    additionalInfo: Text('rafael@gmail.com'),
+                  ),
+                  CupertinoListTile(
+                    title: Text('Miembro desde'),
+                    additionalInfo: Text('Febrero 2023'),
+                  ),
+                  CupertinoListTile(
+                    title: Text('Productos registrados'),
+                    additionalInfo: Text('12'),
+                  ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -157,91 +123,147 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileField(
     String label,
     TextEditingController controller,
-    String hint, {
-    bool readOnly = false,
-    VoidCallback? onTap,
-  }) {
+    String hint,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black54,
+            fontSize: 15,
+            color: CupertinoColors.secondaryLabel,
             fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(height: 8),
-        Container(
+        CupertinoTextField(
+          controller: controller,
+          placeholder: hint,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade400, width: 1.0),
-            ),
+            color: CupertinoColors.systemGrey6,
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: TextField(
-            controller: controller,
-            readOnly: readOnly,
-            onTap: onTap,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hint,
-              hintStyle: TextStyle(color: Colors.grey.shade500),
-              suffixIcon: readOnly
-                  ? const Icon(Icons.calendar_today, size: 20)
-                  : null,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-        ),
-        Text(
-          value,
           style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
+            fontSize: 17,
+            color: CupertinoColors.label,
           ),
         ),
       ],
     );
   }
 
-  /// Selector de fecha de nacimiento
-  /// Fecha inicial: 19 de agosto de 2006 (Cumpleaños de Rafael Chucco)
-  Future<void> _selectBirthDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2006, 8, 19),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+  Widget _buildBirthDateField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Fecha de nacimiento',
+          style: TextStyle(
+            fontSize: 15,
+            color: CupertinoColors.secondaryLabel,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: _selectBirthDate,
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            decoration: BoxDecoration(
+              color: CupertinoColors.systemGrey6,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _birthDateText,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      color: CupertinoColors.label,
+                    ),
+                  ),
+                ),
+                const Icon(
+                  CupertinoIcons.calendar,
+                  size: 20,
+                  color: CupertinoColors.systemGrey,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
+  }
 
-    if (picked != null) {
-      setState(() {
-        _birthDateController.text =
-            '${picked.day.toString().padLeft(2, '0')}/'
-            '${picked.month.toString().padLeft(2, '0')}/'
-            '${picked.year}';
-      });
-    }
+  void _selectBirthDate() {
+    DateTime tempPicked = _birthDate;
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (ctx) => Container(
+        height: 300,
+        color: CupertinoColors.systemBackground.resolveFrom(ctx),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: CupertinoColors.separator,
+                      width: 0.5,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Cancelar'),
+                    ),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() => _birthDate = tempPicked);
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text(
+                        'Listo',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: _birthDate,
+                  minimumDate: DateTime(1900),
+                  maximumDate: DateTime.now(),
+                  onDateTimeChanged: (d) => tempPicked = d,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _birthDateController.dispose();
     super.dispose();
   }
 }

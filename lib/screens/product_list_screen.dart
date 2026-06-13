@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import '../utils/cupertino_dialogs.dart';
+import 'register_product_screen.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -8,7 +10,6 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  // Lista de productos de ejemplo (sin lógica real)
   final List<Map<String, String>> _products = [
     {
       'name': 'Producto 1',
@@ -17,7 +18,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       'category': 'Categoría A',
     },
     {
-      'name': 'Producto 2', 
+      'name': 'Producto 2',
       'price': '\$45.50',
       'description': 'Descripción del producto 2',
       'category': 'Categoría B',
@@ -38,74 +39,72 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Lista de Productos'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('Productos'),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          minimumSize: Size.zero,
+          onPressed: () {
+            Navigator.of(context).push(
+              CupertinoPageRoute<void>(
+                builder: (_) => const RegisterProductScreen(),
+                title: 'Nuevo producto',
+              ),
+            );
+          },
+          child: const Icon(CupertinoIcons.add, size: 28),
+        ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Encabezado
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              'Items',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Text(
+                'Items',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.label,
+                ),
               ),
             ),
-          ),
-          
-          // Lista de productos
-          Expanded(
-            child: _products.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No hay productos registrados',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
+            Expanded(
+              child: _products.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No hay productos registrados',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: CupertinoColors.secondaryLabel,
+                        ),
                       ),
+                    )
+                  : ListView.builder(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 20.0),
+                      itemCount: _products.length,
+                      itemBuilder: (context, index) {
+                        final product = _products[index];
+                        return _ProductItem(
+                          name: product['name']!,
+                          price: product['price']!,
+                          description: product['description']!,
+                          category: product['category']!,
+                          onTap: () {
+                            showInfoDialog(
+                              context,
+                              'Seleccionado: ${product['name']}',
+                            );
+                          },
+                        );
+                      },
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    itemCount: _products.length,
-                    itemBuilder: (context, index) {
-                      final product = _products[index];
-                      return _ProductItem(
-                        name: product['name']!,
-                        price: product['price']!,
-                        description: product['description']!,
-                        category: product['category']!,
-                        onTap: () {
-                          // Sin lógica, solo mostrar mensaje
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Seleccionado: ${product['name']}'),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-          ),
-        ],
-      ),
-      
-      // Botón flotante para agregar producto
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/register-product');
-        },
-        backgroundColor: const Color(0xFF4285F4),
-        child: const Icon(Icons.add, color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -128,63 +127,61 @@ class _ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.grey.shade50,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: CupertinoColors.systemGrey6,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
                       name,
                       style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    Text(
-                      price,
-                      style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF4285F4),
+                        color: CupertinoColors.label,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Categoría: $category',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade500,
-                    fontStyle: FontStyle.italic,
+                  Text(
+                    price,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: CupertinoColors.systemBlue,
+                    ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: CupertinoColors.secondaryLabel,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Categoría: $category',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: CupertinoColors.tertiaryLabel,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
           ),
         ),
       ),
