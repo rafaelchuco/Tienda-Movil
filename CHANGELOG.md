@@ -7,13 +7,23 @@ y este proyecto adhiere al [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### ✅ Migrado en esta versión
+- **Material → Cupertino**: Migración completa de `MaterialApp` a `CupertinoApp`
+- **Menú → CupertinoTabScaffold**: Reemplazado menú de lista por tab bar nativo iOS
+- **ElevatedButton → CupertinoButton.filled**: Todos los botones primarios migrados
+- **TextField → CupertinoTextField**: Campos de entrada migrados a estilo iOS
+- **showDatePicker → CupertinoDatePicker**: Selector de fecha con modal popup nativo
+- **SnackBar → CupertinoAlertDialog**: Feedback de usuario con diálogos iOS
+- **AppBar/Scaffold → CupertinoNavigationBar/CupertinoPageScaffold**: Estructura de pantallas migrada
+- **Nueva pantalla Settings**: `CupertinoListSection` + `CupertinoListTile` con `CupertinoListTileChevron`
+
 ### 🔄 Planificado para próximas versiones
 - Autenticación real con validación
 - Base de datos SQLite local
 - Edición de productos existentes
 - Búsqueda y filtros en lista de productos
 - Imágenes de productos
-- Tema oscuro/claro
+- Soporte tema oscuro (ya compatible via `CupertinoColors` dinámicos)
 - Notificaciones push
 - Sincronización en la nube
 
@@ -37,7 +47,7 @@ y este proyecto adhiere al [Semantic Versioning](https://semver.org/spec/v2.0.0.
   - Información de cuenta (email, fecha de registro, contador de productos)
 - **Sistema de Navegación** completo con rutas nombradas
 - **Función Logout** implementada como arrow function
-- **Diseño Material Design 3** con paleta de colores consistente
+- **Diseño Cupertino (iOS)** con componentes y colores nativos iOS
 - **Documentación completa** incluyendo:
   - README.md principal con guías de instalación y uso
   - Documentación de arquitectura (ARCHITECTURE.md)
@@ -61,8 +71,8 @@ y este proyecto adhiere al [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - **Campos de entrada consistentes** con validación visual
 - **Navegación intuitiva** con botones de retroceso
 - **Feedback visual** para todas las acciones del usuario
-- **Paleta de colores moderna** basada en Google Blue (#4285F4)
-- **Iconografía Material** para mejor experiencia
+- **Paleta de colores Cupertino** con `CupertinoColors.systemBlue` como primario
+- **Iconografía nativa iOS** con `CupertinoIcons`
 - **Scroll automático** en formularios largos
 - **Estados de carga** y mensajes informativos
 
@@ -70,8 +80,8 @@ y este proyecto adhiere al [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - **Flutter 3.11.4+** con Dart moderno
 - **Arquitectura MVC** simplificada y escalable
 - **Gestión de estado** con StatefulWidget
-- **Navegación por rutas nombradas** para mejor organización
-- **Widgets personalizados** reutilizables
+- **Navegación con `CupertinoTabScaffold` y `CupertinoPageRoute`**
+- **Widgets Cupertino** nativos iOS: `CupertinoTextField`, `CupertinoButton`, `CupertinoListSection`, etc.
 - **Controladores de texto** con disposición automática
 - **Validación de tipos** en campos numéricos
 - **Estructura modular** preparada para crecimiento

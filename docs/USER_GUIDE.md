@@ -72,38 +72,34 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 
 ---
 
-### 🏠 2. Menú Principal
+### 🏠 2. Tab Bar Principal (`main_tab_scaffold.dart`)
 
-**Propósito**: Hub central de navegación hacia todas las funcionalidades.
+**Propósito**: Navegación central con `CupertinoTabBar` persistente en la parte inferior.
 
 ```
 ┌─────────────────────────┐
-│         MENU            │
+│   (contenido del tab)   │
 │                         │
-│ [ Home ]                │
-│ [ Profile ]             │  
-│ [ Registrar Producto ]  │
-│ [ Lista de Productos ]  │
-│ [ Settings ]            │
 │                         │
-│ [ Logout ]              │
+│                         │
+├─────────────────────────┤
+│  🏠   📦   👤   ⚙️    │
+│ Home Prod Perfil Ajustes│
 └─────────────────────────┘
 ```
 
-#### 🎯 Opciones Disponibles:
+#### 🎯 Tabs Disponibles:
 
-| Opción | Acción | Descripción |
-|--------|--------|-------------|
-| **Home** | Información | Pantalla principal (próximamente) |
-| **Profile** | Navegar | Ir a tu perfil personal |
-| **Registrar Producto** | Navegar | Añadir nuevo producto |
-| **Lista de Productos** | Navegar | Ver inventario completo |
-| **Settings** | Información | Configuraciones (próximamente) |
-| **Logout** | Salir | Cerrar sesión y volver al login |
+| Tab | Ícono | Pantalla | Descripción |
+|-----|-------|----------|-------------|
+| **Home** | 🏠 `house_fill` | HomeScreen | Pantalla de inicio |
+| **Productos** | 📦 `cube_box_fill` | ProductListScreen | Ver inventario completo |
+| **Perfil** | 👤 `person_fill` | ProfileScreen | Tu perfil personal |
+| **Ajustes** | ⚙️ `settings_solid` | SettingsScreen | Configuraciones |
 
 #### 💡 Tips:
-- El menú es tu punto de partida para todas las tareas
-- Usa **Logout** para cambiar de usuario
+- El tab bar es persistente y siempre visible
+- Cada tab mantiene su propio historial de navegación
 
 ---
 
@@ -257,10 +253,10 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 | **Miembro desde** | Fecha de registro en la app |
 | **Productos registrados** | Contador de productos activos |
 
-#### 📅 Selector de Fecha:
+#### 📅 Selector de Fecha (CupertinoDatePicker):
 - **Rango**: Desde 1900 hasta hoy
 - **Formato**: DD/MM/AAAA
-- **Interacción**: Toca el campo para abrir calendario
+- **Interacción**: Toca el campo para abrir un modal estilo iOS con rueda (spinner) de fechas
 
 #### 💡 Tips:
 - Los cambios se guardan localmente
@@ -271,12 +267,12 @@ Al abrir la aplicación por primera vez, verás la **pantalla de Login**:
 - **Navigator**: Rutas nombradas con `Navigator.pushNamed` y `Navigator.pushReplacementNamed` (ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/menu_screen.dart](lib/screens/menu_screen.dart)).
 - **ListView.builder**: Listas dinámicas y renderizado eficiente (ej. [lib/screens/product_list_screen.dart](lib/screens/product_list_screen.dart)).
 - **TextField & TextEditingController**: Campos de entrada con `obscureText`, `readOnly`, `keyboardType` y `maxLines` (varios screens como [lib/screens/login_screen.dart](lib/screens/login_screen.dart) y [lib/screens/register_product_screen.dart](lib/screens/register_product_screen.dart)).
-- **Botones**: `ElevatedButton` para acciones principales y `FloatingActionButton` para añadir productos.
-- **Layouts y contenedores**: `Scaffold`, `AppBar`, `SafeArea`, `Padding`, `Column`, `Row`, `Expanded`, `SizedBox`.
-- **Interacciones**: `GestureDetector`, `InkWell` y `Material` para respuestas táctiles y efectos visuales.
-- **Feedback**: `ScaffoldMessenger.of(context).showSnackBar` para notificaciones breves al usuario.
-- **Selector de fecha**: `showDatePicker` para elegir fechas (ej. [lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
-- **Avatar y iconos**: `CircleAvatar` y `Icon` usados como placeholders visuales.
+- **Botones**: `CupertinoButton.filled` para acciones primarias y `CupertinoButton` en navigation bar para añadir productos.
+- **Layouts y contenedores**: `CupertinoPageScaffold`, `CupertinoNavigationBar`, `SafeArea`, `Padding`, `Column`, `Row`, `Expanded`, `SizedBox`.
+- **Interacciones**: `GestureDetector` para respuestas táctiles nativas.
+- **Feedback**: `showCupertinoDialog` + `CupertinoAlertDialog` para notificaciones al usuario.
+- **Selector de fecha**: `showCupertinoModalPopup` + `CupertinoDatePicker` para elegir fechas ([lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
+- **Íconos**: `CupertinoIcons` para iconografía nativa iOS (`person_fill`, `calendar`, `add`, etc.).
 - **Estilos**: Uso de `Text`, `TextStyle` y `BoxDecoration` para presentación consistente.
 - **Buenas prácticas**: Liberar `TextEditingController` en `dispose()` para evitar fugas de memoria.
 

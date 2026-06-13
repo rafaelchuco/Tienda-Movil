@@ -72,25 +72,20 @@ La aplicación sigue una arquitectura **MVC (Model-View-Controller)** simplifica
 
 ```mermaid
 graph TB
-    A[main.dart] --> B[MaterialApp]
-    B --> C[Routes]
+    A[main.dart] --> B[CupertinoApp]
+    B --> C[CupertinoTabScaffold]
     C --> D[LoginScreen]
-    C --> E[MenuScreen]
-    C --> F[RegisterProductScreen]
-    C --> G[ProductListScreen]
-    C --> H[ProfileScreen]
-    
-    E --> I[Navigation Hub]
-    I --> F
-    I --> G
-    I --> H
-    I --> D
+    C --> E[MainTabScaffold]
+    E --> F[RegisterProductScreen]
+    E --> G[ProductListScreen]
+    E --> H[ProfileScreen]
+    E --> I[SettingsScreen]
 ```
 
 ### 🎨 Patrón de Diseño
 - **Separation of Concerns**: Cada pantalla en archivo separado
 - **Stateful Widgets**: Para manejo de formularios y estado
-- **Material Design 3**: Siguiendo las últimas guías de Google
+- **Cupertino (iOS Design)**: Componentes y estilos nativos de iOS
 - **Responsive Layout**: Adaptable a diferentes tamaños
 
 ## 📁 Estructura del Proyecto
@@ -103,10 +98,12 @@ tiendamovil/
 │   ├── 📄 main.dart                 # Punto de entrada y rutas
 │   └── 📁 screens/                  # Pantallas de la aplicación
 │       ├── 📄 login_screen.dart             # 🔐 Pantalla de login
-│       ├── 📄 menu_screen.dart              # 🏠 Menú principal
+│       ├── 📄 main_tab_scaffold.dart        # 🏠 Tab bar principal (CupertinoTabScaffold)
+│       ├── 📄 home_screen.dart              # 🏡 Pantalla de inicio
 │       ├── 📄 register_product_screen.dart  # ➕ Registro de productos
 │       ├── 📄 product_list_screen.dart      # 📋 Lista de productos
-│       └── 📄 profile_screen.dart           # 👤 Perfil de usuario
+│       ├── 📄 profile_screen.dart           # 👤 Perfil de usuario
+│       └── 📄 settings_screen.dart          # ⚙️ Configuraciones
 ├── 📁 android/                      # Configuración Android
 ├── 📁 ios/                          # Configuración iOS
 ├── 📁 web/                          # Configuración Web
@@ -210,15 +207,15 @@ flutter run --profile
 
 | Campo | Tipo | Validación | Descripción |
 |-------|------|-----------|-------------|
-| **Email** | TextEditingController | Visual | Campo de correo electrónico |
-| **Password** | TextEditingController | Oculto | Campo de contraseña |
-| **LOGIN Button** | ElevatedButton | - | Navega al menú principal |
+| **Email** | CupertinoTextField | Visual | Campo de correo electrónico |
+| **Password** | CupertinoTextField | Oculto | Campo de contraseña |
+| **LOGIN Button** | CupertinoButton.filled | - | Navega al menú principal |
 
 </div>
 
 **Funcionalidades:**
-- ✅ Campos de entrada con diseño Material
-- ✅ Navegación automática al menú tras login
+- ✅ Campos de entrada con estilo Cupertino nativo
+- ✅ Navegación automática al tab scaffold tras login
 - ✅ Interfaz responsive y elegante
 - ✅ Validación visual de campos
 
@@ -229,34 +226,24 @@ Usuario ingresa credenciales → Presiona LOGIN → Navega a MenuScreen
 
 ---
 
-### 🏠 2. Menu Screen (`menu_screen.dart`)
+### 🏠 2. Main Tab Scaffold (`main_tab_scaffold.dart`)
 
 <div align="center">
 
-| Opción | Acción | Navegación | Descripción |
-|--------|--------|-----------|-------------|
-| **Home** | Mensaje informativo | Local | Pantalla principal (futura) |
-| **Profile** | Navigator.pushNamed | `/profile` | Ir a perfil de usuario |
-| **Registrar Producto** | Navigator.pushNamed | `/register-product` | Ir a registro |
-| **Lista de Productos** | Navigator.pushNamed | `/product-list` | Ver inventario |
-| **Settings** | Mensaje informativo | Local | Configuraciones (futura) |
-| **Logout** | Función flecha | `/login` | Cerrar sesión |
+| Tab | Ícono | Pantalla | Descripción |
+|-----|-------|----------|-------------|
+| **Home** | `CupertinoIcons.house_fill` | HomeScreen | Pantalla principal |
+| **Productos** | `CupertinoIcons.cube_box_fill` | ProductListScreen | Lista de productos |
+| **Perfil** | `CupertinoIcons.person_fill` | ProfileScreen | Perfil de usuario |
+| **Ajustes** | `CupertinoIcons.settings_solid` | SettingsScreen | Configuraciones |
 
 </div>
 
 **Funcionalidades:**
-- ✅ Hub central de navegación
-- ✅ Función logout implementada como arrow function
-- ✅ Diseño de menú modular y escalable
-- ✅ Feedback visual para cada acción
-
-**Código de Logout:**
-```dart
-void _logout(BuildContext context) {
-  // Función flecha para logout
-  Navigator.pushReplacementNamed(context, '/login');
-}
-```
+- ✅ Navegación por tabs con `CupertinoTabScaffold` + `CupertinoTabBar`
+- ✅ Cada tab tiene su propio `CupertinoTabView` con stack de navegación independiente
+- ✅ Íconos nativos iOS con `CupertinoIcons`
+- ✅ Color activo `CupertinoColors.systemBlue`
 
 ---
 
@@ -294,9 +281,9 @@ Llenar campos → GUARDAR → Mostrar confirmación → Limpiar formulario
 
 | Elemento | Tipo | Datos Mostrados | Interacción |
 |----------|------|----------------|-------------|
-| **Header** | Text | "Items" | Visual |
+| **Navigation Bar** | CupertinoNavigationBar | "Productos" | Visual |
 | **Product Item** | Custom Widget | Nombre, Precio, Descripción, Categoría | Tap para seleccionar |
-| **FAB** | FloatingActionButton | Icono + | Navega a registro |
+| **Botón Agregar** | CupertinoButton (trailing) | Icono `CupertinoIcons.add` | Navega a registro |
 | **ListView** | ListView.builder | Lista dinámica | Scroll infinito |
 
 </div>
@@ -345,15 +332,23 @@ Map<String, String> product = {
 
 **DatePicker Implementation (Usuario Rafael Chucco):**
 ```dart
-Future<void> _selectBirthDate(BuildContext context) async {
-  final DateTime? picked = await showDatePicker(
+void _selectBirthDate(BuildContext context) {
+  showCupertinoModalPopup<void>(
     context: context,
-    initialDate: DateTime(2006, 8, 19),  // Fecha de Rafael
-    firstDate: DateTime(1900),
-    lastDate: DateTime.now(),
+    builder: (ctx) => SizedBox(
+      height: 260,
+      child: CupertinoDatePicker(
+        mode: CupertinoDatePickerMode.date,
+        initialDateTime: DateTime(2006, 8, 19),  // Fecha de Rafael
+        minimumDate: DateTime(1900),
+        maximumDate: DateTime.now(),
+        onDateTimeChanged: (date) {
+          // Formateo automático DD/MM/AAAA
+          // Ej: 19/08/2006
+        },
+      ),
+    ),
   );
-  // Formateo automático DD/MM/AAAA
-  // Ej: 19/08/2006
 }
 ```
 
@@ -372,17 +367,19 @@ void initState() {
 }
 ```
 
-## � Widgets y APIs usados por las vistas
-- **Navigator**: Rutas nombradas con `Navigator.pushNamed` y `Navigator.pushReplacementNamed` (ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/menu_screen.dart](lib/screens/menu_screen.dart)).
-- **ListView.builder**: Listas dinámicas y renderizado eficiente para colecciones largas (ej. [lib/screens/product_list_screen.dart](lib/screens/product_list_screen.dart)).
-- **TextField & TextEditingController**: Entradas de texto con opciones como `obscureText`, `readOnly`, `keyboardType` y `maxLines` (varios screens, p. ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/register_product_screen.dart](lib/screens/register_product_screen.dart)).
-- **Botones**: `ElevatedButton` para acciones primarias y `FloatingActionButton` para acciones destacadas.
-- **Estructura y layout**: `Scaffold`, `AppBar`, `SafeArea`, `Padding`, `Column`, `Row`, `Expanded`, `SizedBox`.
-- **Interacciones táctiles**: `GestureDetector`, `InkWell` y `Material` para manejar taps y efectos visuales.
-- **Mensajes y feedback**: `ScaffoldMessenger.of(context).showSnackBar` para mostrar mensajes temporales al usuario.
-- **Selector de fecha**: `showDatePicker` para seleccionar fechas (ej. [lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
-- **Avatares y iconos**: `CircleAvatar` y `Icon` para representaciones visuales de usuario y acciones.
-- **Estilos y decoración**: `Text`, `TextStyle`, `BoxDecoration`, `Border`, `BorderRadius`, y colores personalizados.
+## Widgets y APIs usados por las vistas
+- **CupertinoApp**: Raíz de la aplicación con `CupertinoThemeData` y `primaryColor: CupertinoColors.systemBlue`.
+- **CupertinoTabScaffold + CupertinoTabBar**: Navegación por pestañas con `CupertinoTabView` por tab ([lib/screens/main_tab_scaffold.dart](lib/screens/main_tab_scaffold.dart)).
+- **CupertinoPageScaffold + CupertinoNavigationBar**: Estructura de pantalla estilo iOS (ej. [lib/screens/product_list_screen.dart](lib/screens/product_list_screen.dart), [lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
+- **CupertinoPageRoute**: Navegación con transición slide estilo iOS.
+- **CupertinoTextField**: Campos de texto nativos iOS con `placeholder`, `obscureText`, `keyboardType` y `maxLines` (ej. [lib/screens/login_screen.dart](lib/screens/login_screen.dart), [lib/screens/register_product_screen.dart](lib/screens/register_product_screen.dart)).
+- **CupertinoButton / CupertinoButton.filled**: Botones nativos iOS para acciones primarias y secundarias.
+- **CupertinoListSection + CupertinoListTile**: Listas agrupadas estilo iOS con `CupertinoListTileChevron` (ej. [lib/screens/settings_screen.dart](lib/screens/settings_screen.dart), [lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
+- **ListView.builder**: Listas dinámicas para colecciones de productos ([lib/screens/product_list_screen.dart](lib/screens/product_list_screen.dart)).
+- **CupertinoIcons**: Íconos nativos iOS (`house_fill`, `cube_box_fill`, `person_fill`, `settings_solid`, `add`, `calendar`, etc.).
+- **CupertinoColors**: Paleta de colores semántica (`systemBlue`, `systemBackground`, `label`, `secondaryLabel`, `systemGrey6`, etc.).
+- **showCupertinoModalPopup + CupertinoDatePicker**: Selector de fecha nativo iOS ([lib/screens/profile_screen.dart](lib/screens/profile_screen.dart)).
+- **showCupertinoDialog + CupertinoAlertDialog**: Diálogos de confirmación estilo iOS ([lib/utils/cupertino_dialogs.dart](lib/utils/cupertino_dialogs.dart)).
 - **Gestión de recursos**: Llamadas a `dispose()` para liberar `TextEditingController` y evitar fugas de memoria.
 
 ## �🧭 Flujo de Navegación
@@ -391,36 +388,37 @@ void initState() {
 flowchart TD
     A[🚀 App Startup] --> B[🔐 Login Screen]
     
-    B --> |Login Success| C[🏠 Menu Screen]
+    B --> |Login Success| C[🏠 CupertinoTabScaffold]
     
-    C --> |Profile| D[👤 Profile Screen]
-    C --> |Register Product| E[➕ Register Product Screen]
-    C --> |Product List| F[📋 Product List Screen]
-    C --> |Logout| B
+    C --> |Tab 0| D[🏡 Home Screen]
+    C --> |Tab 1| E[📋 Product List Screen]
+    C --> |Tab 2| F[👤 Profile Screen]
+    C --> |Tab 3| G[⚙️ Settings Screen]
     
-    D --> |Back| C
-    E --> |Back| C
-    E --> |Save| E
-    F --> |Back| C
-    F --> |Add Product| E
+    E --> |CupertinoPageRoute| H[➕ Register Product Screen]
+    H --> |Pop| E
     
     style A fill:#e1f5fe
     style B fill:#fff3e0
     style C fill:#e8f5e9
     style D fill:#fce4ec
-    style E fill:#f3e5f5
-    style F fill:#fff8e1
+    style E fill:#fff8e1
+    style F fill:#f3e5f5
+    style G fill:#e8f5e9
 ```
 
-### 📍 Rutas Definidas
+### 📍 Estructura de Navegación
 
-| Ruta | Pantalla | Descripción |
-|------|----------|-------------|
-| `/login` | LoginScreen | Pantalla inicial de autenticación |
-| `/menu` | MenuScreen | Hub central de navegación |
-| `/register-product` | RegisterProductScreen | Formulario de registro |
-| `/product-list` | ProductListScreen | Lista de productos |
-| `/profile` | ProfileScreen | Perfil de usuario |
+| Nivel | Widget | Pantalla | Descripción |
+|-------|--------|----------|-------------|
+| Raíz | `CupertinoApp` | — | Punto de entrada (initialRoute: `/login`) |
+| Login | `CupertinoPageScaffold` | LoginScreen | Pantalla inicial de autenticación |
+| Principal | `CupertinoTabScaffold` | MainTabScaffold | Hub central con 4 tabs |
+| Tab 0 | `CupertinoTabView` | HomeScreen | Pantalla de inicio |
+| Tab 1 | `CupertinoTabView` | ProductListScreen | Lista de productos |
+| Tab 2 | `CupertinoTabView` | ProfileScreen | Perfil de usuario |
+| Tab 3 | `CupertinoTabView` | SettingsScreen | Configuraciones |
+| Modal | `CupertinoPageRoute` | RegisterProductScreen | Formulario de registro |
 
 ## 🎯 Casos de Uso
 
@@ -468,8 +466,8 @@ graph LR
 ### 🎨 Frontend
 - **Framework**: Flutter 3.11.4+
 - **Lenguaje**: Dart
-- **UI Kit**: Material Design 3
-- **Navegación**: Named Routes
+- **UI Kit**: Cupertino (iOS Design System)
+- **Navegación**: CupertinoTabScaffold + CupertinoPageRoute
 - **Estado**: StatefulWidget
 
 ### 📦 Dependencias Principales
@@ -485,12 +483,12 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 ```
 
-### 🎨 Paleta de Colores
-- **Primario**: `#4285F4` (Google Blue)
-- **Secundario**: `#FFFFFF` (White)
-- **Accent**: `#E3F2FD` (Light Blue)
-- **Error**: `#F44336` (Red)
-- **Success**: `#4CAF50` (Green)
+### 🎨 Paleta de Colores (CupertinoColors)
+- **Primario**: `CupertinoColors.systemBlue`
+- **Fondo**: `CupertinoColors.systemBackground`
+- **Texto**: `CupertinoColors.label` / `CupertinoColors.secondaryLabel`
+- **Superficie**: `CupertinoColors.systemGrey6`
+- **Separador**: `CupertinoColors.separator`
 
 ## 🧪 Datos de Prueba
 

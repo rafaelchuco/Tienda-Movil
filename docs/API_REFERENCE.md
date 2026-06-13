@@ -82,20 +82,16 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Tienda Móvil',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4285F4)),
-        useMaterial3: true,
+      theme: const CupertinoThemeData(
+        primaryColor: CupertinoColors.systemBlue,
       ),
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
-        '/menu': (context) => const MenuScreen(),
-        '/register-product': (context) => const RegisterProductScreen(),
-        '/product-list': (context) => const ProductListScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/main': (context) => const MainTabScaffold(),
       },
     );
   }
@@ -106,7 +102,7 @@ class MyApp extends StatelessWidget {
 | Propiedad | Tipo | Descripción |
 |-----------|------|-------------|
 | `title` | String | Título de la aplicación |
-| `theme` | ThemeData | Tema Material Design |
+| `theme` | CupertinoThemeData | Tema Cupertino con `primaryColor` |
 | `initialRoute` | String | Ruta inicial (`/login`) |
 | `routes` | Map<String, WidgetBuilder> | Mapa de rutas nombradas |
 
@@ -145,56 +141,43 @@ class _LoginScreenState extends State<LoginScreen> {
 | `dispose()` | void | Libera recursos de controladores |
 
 #### Eventos:
-- **onPressed (LOGIN)**: Navega a `/menu` usando `Navigator.pushReplacementNamed`
+- **onPressed (LOGIN)**: Navega a `/main` usando `Navigator.pushReplacementNamed`
 
 ---
 
-### 🏠 MenuScreen
+### 🏠 MainTabScaffold
 
-**Ubicación**: `lib/screens/menu_screen.dart`
+**Ubicación**: `lib/screens/main_tab_scaffold.dart`
 
 ```dart
-class MenuScreen extends StatelessWidget {
-  const MenuScreen({super.key});
+class MainTabScaffold extends StatelessWidget {
+  const MainTabScaffold({super.key});
   
   @override
   Widget build(BuildContext context) {
-    // ... implementación
-  }
-  
-  void _logout(BuildContext context) {
-    Navigator.pushReplacementNamed(context, '/login');
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        activeColor: CupertinoColors.systemBlue,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.house_fill), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.cube_box_fill), label: 'Productos'),
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_fill), label: 'Perfil'),
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings_solid), label: 'Ajustes'),
+        ],
+      ),
+      tabBuilder: (context, index) {
+        // Retorna CupertinoTabView según el índice
+      },
+    );
   }
 }
 ```
 
-#### Métodos Privados:
-| Método | Parámetros | Retorno | Descripción |
-|--------|------------|---------|-------------|
-| `_logout` | BuildContext context | void | Función flecha para logout |
-
-#### Widget Personalizado: _MenuOption
-
-```dart
-class _MenuOption extends StatelessWidget {
-  final String text;
-  final VoidCallback onTap;
-  final bool isLogout;
-
-  const _MenuOption({
-    required this.text,
-    required this.onTap,
-    this.isLogout = false,
-  });
-}
-```
-
-**Propiedades**:
-| Propiedad | Tipo | Opcional | Descripción |
-|-----------|------|----------|-------------|
-| `text` | String | ❌ | Texto del menú |
-| `onTap` | VoidCallback | ❌ | Función al tocar |
-| `isLogout` | bool | ✅ | Estilo especial para logout |
+**Propiedades del CupertinoTabBar**:
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `activeColor` | CupertinoColors | Color del tab activo |
+| `items` | List<BottomNavigationBarItem> | Tabs con ícono y label |
 
 ---
 
@@ -338,14 +321,23 @@ Future<void> _selectBirthDate(BuildContext context)
 | `_buildInfoRow` | label, value | Widget | Fila de información de solo lectura |
 | `_selectBirthDate` | context | Future<void> | Abre selector de fecha |
 
-#### DatePicker Configuration:
+#### DatePicker Configuration (CupertinoDatePicker):
 ```dart
-final DateTime? picked = await showDatePicker(
-  context: context,
-  initialDate: DateTime(1990, 3, 15),  // Fecha inicial
-  firstDate: DateTime(1900),           // Fecha mínima
-  lastDate: DateTime.now(),            // Fecha máxima (hoy)
-);
+void _selectBirthDate(BuildContext context) {
+  showCupertinoModalPopup<void>(
+    context: context,
+    builder: (ctx) => SizedBox(
+      height: 260,
+      child: CupertinoDatePicker(
+        mode: CupertinoDatePickerMode.date,
+        initialDateTime: DateTime(2006, 8, 19),
+        minimumDate: DateTime(1900),
+        maximumDate: DateTime.now(),
+        onDateTimeChanged: (date) { /* actualizar controlador */ },
+      ),
+    ),
+  );
+}
 ```
 
 ## 📊 Modelos de Datos
@@ -461,23 +453,27 @@ class Category {
 
 ## 🔧 Servicios y Utilidades
 
-### 🎨 Constantes de Tema
+### 🎨 Constantes de Tema (CupertinoColors actuales)
 
 ```dart
-// colors.dart (futuro)
+// Colores semánticos Cupertino ya en uso
+CupertinoColors.systemBlue        // Primario / acciones
+CupertinoColors.systemBackground  // Fondo principal
+CupertinoColors.label             // Texto principal
+CupertinoColors.secondaryLabel    // Texto secundario
+CupertinoColors.tertiaryLabel     // Texto terciario
+CupertinoColors.systemGrey6       // Superficie / cards
+CupertinoColors.separator         // Separadores
+CupertinoColors.systemRed         // Acciones destructivas
+CupertinoColors.systemIndigo      // Acentos alternativos
+CupertinoColors.white             // Texto sobre fondos oscuros
+
+// colors.dart (futuro - wrapper de CupertinoColors)
 class AppColors {
-  static const Color primary = Color(0xFF4285F4);
-  static const Color secondary = Color(0xFFFFFFFF);
-  static const Color accent = Color(0xFFE3F2FD);
-  static const Color error = Color(0xFFF44336);
-  static const Color success = Color(0xFF4CAF50);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color info = Color(0xFF2196F3);
-  
-  // Text colors
-  static const Color textPrimary = Color(0xFF212121);
-  static const Color textSecondary = Color(0xFF757575);
-  static const Color textHint = Color(0xFF9E9E9E);
+  static const primary = CupertinoColors.systemBlue;
+  static const background = CupertinoColors.systemBackground;
+  static const label = CupertinoColors.label;
+  static const secondaryLabel = CupertinoColors.secondaryLabel;
 }
 ```
 
@@ -560,16 +556,13 @@ class Validators {
 // routes.dart (futuro)
 class AppRoutes {
   static const String login = '/login';
-  static const String menu = '/menu';
-  static const String registerProduct = '/register-product';
-  static const String productList = '/product-list';
-  static const String profile = '/profile';
+  static const String main = '/main';  // MainTabScaffold con CupertinoTabScaffold
   
-  // Futuras rutas
-  static const String productDetail = '/product-detail';
-  static const String settings = '/settings';
-  static const String help = '/help';
-  static const String about = '/about';
+  // Navegación intra-tab via CupertinoPageRoute (no rutas nombradas)
+  // Tab 0: HomeScreen
+  // Tab 1: ProductListScreen -> RegisterProductScreen
+  // Tab 2: ProfileScreen
+  // Tab 3: SettingsScreen
 }
 ```
 
@@ -730,11 +723,11 @@ class WebSocketService {
 
 ```dart
 // Uso actual (v1.0.0)
-ElevatedButton(
+CupertinoButton.filled(
   onPressed: () {
-    Navigator.pushReplacementNamed(context, '/menu');
+    Navigator.pushReplacementNamed(context, '/main');
   },
-  child: Text('LOGIN'),
+  child: const Text('LOGIN'),
 )
 
 // Uso futuro (v1.1.0+)
@@ -761,14 +754,24 @@ ElevatedButton(
 
 ```dart
 // Uso actual (v1.0.0)
-ElevatedButton(
+CupertinoButton.filled(
   onPressed: () {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Producto guardado (sin lógica implementada)')),
+    showCupertinoDialog<void>(
+      context: context,
+      builder: (ctx) => CupertinoAlertDialog(
+        title: const Text('Éxito'),
+        content: const Text('Producto guardado'),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
     _clearFields();
   },
-  child: Text('GUARDAR'),
+  child: const Text('GUARDAR'),
 )
 
 // Uso futuro (v1.1.0+)

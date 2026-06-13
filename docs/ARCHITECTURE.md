@@ -12,7 +12,7 @@
 
 ## 🎯 Visión General
 
-La aplicación **Tienda Móvil** está construida siguiendo una arquitectura **limpia y escalable** basada en los principios de **Flutter** y **Material Design**. La arquitectura se centra en la **separación de responsabilidades** y **mantenibilidad** del código.
+La aplicación **Tienda Móvil** está construida siguiendo una arquitectura **limpia y escalable** basada en los principios de **Flutter** y **Cupertino (iOS Design)**. La arquitectura se centra en la **separación de responsabilidades** y **mantenibilidad** del código.
 
 ### 🔧 Principios Arquitectónicos
 
@@ -220,18 +220,19 @@ graph LR
 ### Navegación por Rutas Nombradas
 
 ```dart
-// main.dart - Configuración de rutas
+// main.dart - Configuración de la app
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
+      title: 'Tienda Móvil',
+      theme: const CupertinoThemeData(
+        primaryColor: CupertinoColors.systemBlue,
+      ),
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
-        '/menu': (context) => const MenuScreen(),
-        '/register-product': (context) => const RegisterProductScreen(),
-        '/product-list': (context) => const ProductListScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/main': (context) => const MainTabScaffold(),
       },
     );
   }
@@ -242,30 +243,31 @@ class MyApp extends StatelessWidget {
 
 ```mermaid
 graph TD
-    A[🔐 /login] --> B[🏠 /menu]
-    B --> C[👤 /profile]
-    B --> D[➕ /register-product] 
-    B --> E[📋 /product-list]
-    B --> A
-    C --> B
-    D --> B
-    E --> B
-    E --> D
+    A[🔐 /login] --> B[🏠 MainTabScaffold]
+    B --> C[Tab 0: HomeScreen]
+    B --> D[Tab 1: ProductListScreen]
+    B --> E[Tab 2: ProfileScreen]
+    B --> F[Tab 3: SettingsScreen]
+    D --> |CupertinoPageRoute| G[➕ RegisterProductScreen]
+    G --> |Pop| D
     
     style A fill:#fff3e0
     style B fill:#e8f5e9
     style C fill:#fce4ec
-    style D fill:#f3e5f5
-    style E fill:#fff8e1
+    style D fill:#fff8e1
+    style E fill:#f3e5f5
+    style F fill:#e8f5e9
+    style G fill:#e1f5fe
 ```
 
 ### Tipos de Navegación Implementados
 
 | Método | Uso | Descripción |
 |--------|-----|-------------|
-| `pushNamed` | Navegación normal | Añade nueva pantalla al stack |
-| `pushReplacementNamed` | Login/Logout | Reemplaza la pantalla actual |
-| `pop` | Regresar | Vuelve a la pantalla anterior |
+| `CupertinoTabScaffold` | Navegación por tabs | Tab bar persistente con 4 secciones |
+| `CupertinoPageRoute` | Pantallas modales | Transición slide estilo iOS |
+| `Navigator.pushReplacementNamed` | Login/Logout | Reemplaza la pantalla actual |
+| `Navigator.pop` | Regresar | Vuelve a la pantalla anterior |
 
 ## 🧩 Componentes y Widgets
 
@@ -273,13 +275,14 @@ graph TD
 
 ```mermaid
 graph TB
-    A[MaterialApp] --> B[Routes]
-    B --> C[Screens]
-    C --> D[Scaffold]
-    D --> E[AppBar]
-    D --> F[Body]
-    F --> G[Custom Widgets]
-    G --> H[Built-in Widgets]
+    A[CupertinoApp] --> B[LoginScreen]
+    A --> C[MainTabScaffold]
+    C --> D[CupertinoTabScaffold]
+    D --> E[CupertinoTabBar]
+    D --> F[CupertinoTabView x4]
+    F --> G[CupertinoPageScaffold]
+    G --> H[CupertinoNavigationBar]
+    G --> I[Body / Custom Widgets]
     
     style A fill:#e1f5fe
     style C fill:#e8f5e9
@@ -288,18 +291,7 @@ graph TB
 
 ### Widgets Personalizados Actuales
 
-#### 1. _MenuOption Widget
-```dart
-class _MenuOption extends StatelessWidget {
-  final String text;
-  final VoidCallback onTap;
-  final bool isLogout;
-  
-  // Implementación del widget reutilizable
-}
-```
-
-#### 2. _ProductItem Widget  
+#### 1. _ProductItem Widget  
 ```dart
 class _ProductItem extends StatelessWidget {
   final String name;
@@ -308,9 +300,12 @@ class _ProductItem extends StatelessWidget {
   final String category;
   final VoidCallback onTap;
   
-  // Widget para mostrar productos en lista
+  // Widget para mostrar productos en lista con estilo Cupertino
 }
 ```
+
+#### 2. CupertinoListTile (settings_screen / profile_screen)
+Uso de `CupertinoListSection.insetGrouped` con `CupertinoListTile` para listas agrupadas estilo iOS.
 
 ### Widgets Futuros Planificados
 
